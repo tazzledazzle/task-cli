@@ -1,5 +1,4 @@
 # Task-Cli
-[![roadmap.sh](https://roadmap.sh/card/tall/66f5c22ec45e253cb0b45e4b?variant=dark)](https://roadmap.sh)
 
 The application should run from the command line, accept user actions and inputs as arguments, and store the tasks in a JSON file. The user should be able to:
 
@@ -47,16 +46,16 @@ task-cli list in-progress
 ## Task Properties
 Each task should have the following properties:
 
-* id: A unique identifier for the task
-* description: A short description of the task
-* status: The status of the task (todo, in-progress, done)
-* createdAt: The date and time when the task was created
-* updatedAt: The date and time when the task was last updated
+* **id**: A unique identifier for the task
+* **description**: A short description of the task
+* **status**: The status of the task (todo, in-progress, done)
+* **createdAt**: The date and time when the task was created
+* **updatedAt**: The date and time when the task was last updated
 
 Make sure to add these properties to the JSON file when adding a new task and update them when updating a task.
 
 ## Getting Started
-Here are a few steps to help you get started with the Task Tracker CLI project:
+Here are a few steps to help you get started with the **Task Tracker CLI** project:
 
 * Set Up Your Development Environment
 * Choose a programming language you are comfortable with (e.g., Python, JavaScript, etc.).
@@ -82,3 +81,5 @@ Here are a few steps to help you get started with the Task Tracker CLI project:
 By the end of this project, you will have developed a practical tool that can help you or others manage tasks efficiently. This project lays a solid foundation for more advanced programming projects and real-world applications.
 
 Happy coding!
+
+[![roadmap.sh](https://roadmap.sh/card/tall/66f5c22ec45e253cb0b45e4b?variant=dark)](https://roadmap.sh)
