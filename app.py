@@ -1,91 +1,54 @@
 import argparse
 import sys
 
+import task
 
-class AddFunction(argparse.Action):
-    def __call__(self, parser, namespace, values, option_string=None):
-        add_task(namespace, values)
-
-class UpdateFunction(argparse.Action):
-    def __call__(self, parser, namespace, values, option_string=None):
-        update_task(namespace, values)
-
-class ListFunction(argparse.Action):
-    def __call__(self, *args, **kwargs):
-        list_tasks(*args, **kwargs)
-
-class DeleteFunction(argparse.Action):
-    def __call__(self, parser, namespace, values, option_string=None):
-        delete_task(namespace, values)
-
-class InProgressFunction(argparse.Action):
-    def __call__(self, *args, **kwargs):
-        mark_task_in_progress(*args, **kwargs)
-
-class CompletedFunction(argparse.Action):
-    def __call__(self, *args, **kwargs):
-        mark_task_done(*args, **kwargs)
-
-
-def add_task(namespace, values):
-    # check and see if JSON file exists
-    # if not found create it and add to file
-    # else append to found file
-    pass
-
-def update_task(namespace, values):
-    # check if JSON file exists
-    # check inputs
-    # retrieve task based on id
-    # update description with new task text
-    # store in JSON file
-    pass
-
-
-def delete_task(namespace, values):
-    # find task by id
-    # return if not found
-    # remove row from in memory store
-    pass
-
-
-def list_tasks(param, param1):
-    # pretty print to the console
-    pass
-
-def mark_task_in_progress(param, param1):
-    # retrieve task by id
-    # change status of task
-    # update records in JSON
-    pass
-
-
-
-def mark_task_done(param, param1):
-    # retrieve task by id
-    # change status of task
-    # update records in JSON
-
-    pass
-
-
-def setup_arguments():
+def main(*args):
+    # subparser to group commands
     parser = argparse.ArgumentParser('Task-Cli: take tasks on the command line')
+    subparsers = parser.add_subparsers(dest='command')
 
-    parser.add_argument('add', action=AddFunction, help='Tasks to execute')
-    parser.add_argument('update', action=UpdateFunction, help='Tasks to execute')
-    parser.add_argument('delete', action=DeleteFunction, help='Tasks to execute')
-    parser.add_argument('list', action=ListFunction, help='Tasks to execute')
-    parser.add_argument('mark-in-progress', action=InProgressFunction, help='Tasks to execute')
-    parser.add_argument('mark-done', action=CompletedFunction, help='Tasks to execute')
+    # add
+    parser_add = subparsers.add_parser('add')
+    parser_add.add_argument('description', type=str, help='Task description')
 
-    return parser.parse_args()
+    # update
+    parser_update = subparsers.add_parser('update')
+    parser_update.add_argument('id', type=int, help='Task ID')
+    parser_update.add_argument('description', type=str, help='Task description')
 
+    # delete
+    parser_delete = subparsers.add_parser('delete')
+    parser_delete.add_argument('id', type=int, help='Task ID')
 
-def main():
-    print(sys.argv)
-    args = setup_arguments()
-    # while true, accept all input from users
+    # list
+    parser_list = subparsers.add_parser('list')
+    parser_list.add_argument('status', nargs='?', choices=['todo', 'in-progress', 'complete'], help='Task status')
+
+    # mark-in-progress
+    parser_in_progress = subparsers.add_parser('in_progress')
+    parser_in_progress.add_argument('id', type=int, help='Task ID')
+
+    # mark as complete
+    parser_complete = subparsers.add_parser('complete')
+    parser_complete.add_argument('id', type=int, help='Task ID')
+
+    args_in = parser.parse_args(args)
+
+    # determine which command
+    if args_in.command == 'add':
+        print(f"Adding {args_in.description}")
+        task.add_task(args_in.description)
+    elif args_in.command == 'update':
+        task.update_task(args_in.id, args_in.description)
+    elif args_in.command == 'delete':
+        task.delete_task(args_in.id)
+    elif args_in.command == 'list':
+        task.list_tasks(args_in.status.value)
+    elif args_in.command == 'in_progress':
+        task.mark_task_in_progress(args_in.id)
+    elif args_in.command == 'complete':
+        task.mark_task_complete(args_in.id)
 
 if __name__ == '__main__':
     main()
