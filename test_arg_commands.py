@@ -13,7 +13,6 @@ class TestArgCommands(unittest.TestCase):
         if tasks:
             timed_tasks = [task for task in tasks if timestamp in task.description]
             self.assertTrue(timed_tasks is not None)
-        # self.assertTrue(tasks is not None)
 
 
     def test_add_task(self):
@@ -21,7 +20,7 @@ class TestArgCommands(unittest.TestCase):
 
 
     def test_remove_task(self):
-        app.main("remove", "1")
+        app.main("delete", "1")
 
     def test_update_task(self):
         app.main("update", "2", "I've changed the title")
@@ -33,7 +32,7 @@ class TestArgCommands(unittest.TestCase):
         app.main("list", "todo")
 
     def test_list_done(self):
-        app.main("list", "done")
+        app.main("list", "complete")
 
     def test_mark_done(self):
         app.main("complete", "3")

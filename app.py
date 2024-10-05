@@ -44,7 +44,7 @@ def main(*args):
     elif args_in.command == 'delete':
         task.delete_task(args_in.id)
     elif args_in.command == 'list':
-        task.list_tasks(args_in.status.value)
+        task.list_tasks(args_in.status)
     elif args_in.command == 'in_progress':
         task.mark_task_in_progress(args_in.id)
     elif args_in.command == 'complete':

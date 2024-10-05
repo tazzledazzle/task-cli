@@ -1,10 +1,8 @@
-import json
 import os
 import unittest
 from datetime import datetime
 
-import task
-from task import Task, Status, load_json_tasks, generate_task_id, save_tasks, time_format, add_task
+from task import Status, load_json_tasks, generate_task_id, save_tasks, time_format, add_task
 
 TEST_TASKS_FILE = 'test_tasks.json'
 test_task = {
@@ -18,18 +16,14 @@ test_task = {
 class TestAppCli(unittest.TestCase):
 
     def setUp(self):
-        # Prepare a clean test environment
         if os.path.exists(TEST_TASKS_FILE):
             os.remove(TEST_TASKS_FILE)
 
-    def test_app_test_framework(self):
-        self.assertTrue(True)
-
     def test_task_creation(self):
-        task = add_task(test_task['description'])
+        test_created_task = add_task(test_task['description'])
 
-        self.assertEqual(task['description'], test_task['description'])
-        self.assertEqual(task['status'], Status.todo.value)
+        self.assertEqual(test_created_task['description'], test_task['description'])
+        self.assertEqual(test_created_task['status'], Status.todo.value)
 
     def test_load_tasks(self):
         try:
@@ -40,10 +34,10 @@ class TestAppCli(unittest.TestCase):
 
 
     def test_save_tasks(self):
-        tasks = load_json_tasks()
-        tasks.append(test_task) # this isn't testing anything
+        test_save_task = load_json_tasks()
+        test_save_task.append(test_task) # this isn't testing anything
 
-        self.assertTrue(test_task in tasks)
+        self.assertEqual(len(test_save_task), 1)
 
     def test_generate_task_id_simple(self):
         generated_task_id = generate_task_id([])
@@ -51,19 +45,17 @@ class TestAppCli(unittest.TestCase):
 
 
     def test_add_task(self):
-        tasks = []
-        test_task = {
+        tasks = load_json_tasks()
+        test_add_task = {
             'id': generate_task_id(tasks),
             'description': "this is a test",
             'created_at': datetime.now().strftime(time_format),
             'updated_at': datetime.now().strftime(time_format),
             'status': Status.todo.value
         }
-        tasks.append(
-            test_task
-        )
+        add_task(test_add_task['description'], test_add_task)
 
-        self.assertEqual(tasks, [test_task])
+        self.assertEqual(tasks, [test_add_task])
 
 
     def test_generate_task_id_complex(self):
@@ -73,15 +65,13 @@ class TestAppCli(unittest.TestCase):
         self.assertEqual(generate_task_id(tasks), 2)
 
     def test_load_tasks_gpt(self):
-        # Start with an empty file
         with open(TEST_TASKS_FILE, 'w') as f:
-            f.write('')  # Ensure file is empty
+            f.write('')
 
         tasks = load_json_tasks(TEST_TASKS_FILE)
         self.assertEqual(tasks, [], "Should return an empty list if the file is empty")
 
     def test_save_tasks_gpt(self):
-        # Save tasks and then load them to verify
         tasks_to_save = [{"id": 1, "description": "Test Task", "status": "todo"}]
         save_tasks(TEST_TASKS_FILE, tasks_to_save)
 

@@ -84,33 +84,38 @@ def generate_task_id(tasks):
 
 def update_task(task_id, updated_desc):
     tasks = list_tasks()
-    for task in tasks:
-        if task['id'] == task_id:
-            task['description'] = updated_desc
-            task['updatedAt'] = datetime.now().strftime(time_format)
-            save_tasks(tasks)
-            print(f"Task {task_id} updated.")
-            return task
+    if tasks:
+        for task in tasks:
+            if task['id'] == task_id:
+                task['description'] = updated_desc
+                task['updatedAt'] = datetime.now().strftime(time_format)
+                save_tasks(tasks)
+                print(f"Task {task_id} updated.")
+                return task
     print(f"Task {task_id} not found.")
     return []
 
 
 def delete_task(task_id):
     tasks = list_tasks()
-    tasks = [task for task in tasks if task['id'] != task_id]
-    save_tasks(tasks)
-    print(f"Task {task_id} deleted.")
-    return tasks
+    if tasks:
+        tasks = [task for task in tasks if task['id'] != task_id]
+        save_tasks(tasks)
+        print(f"Task {task_id} deleted.")
+        return tasks
+    print(f"Task {task_id} not found.")
+    return []
 
 def update_task_status(task_id, status):
     tasks = list_tasks()
-    for task in tasks:
-        if task['id'] == task_id:
-            task['status'] = status
-            task['updatedAt'] = datetime.now().strftime(time_format)
-            save_tasks(tasks)
-            print(f"Task {task_id} updated with status: {status}.")
-            return task
+    if tasks:
+        for task in tasks:
+            if task['id'] == task_id:
+                task['status'] = status
+                task['updatedAt'] = datetime.now().strftime(time_format)
+                save_tasks(tasks)
+                print(f"Task {task_id} updated with status: {status}.")
+                return task
     print(f"Task {task_id} not found.")
     return []
 
