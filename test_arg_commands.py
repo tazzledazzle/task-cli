@@ -1,8 +1,13 @@
+'''
+    test cli functionality
+'''
+# pylint: disable=unused-import,missing-function-docstring,missing-class-docstring
+
 import unittest
 from datetime import datetime
 
-import app
-from task import list_tasks
+import app  # pylint: disable=import-error
+from task import list_tasks  # pylint: disable=import-error
 
 
 class TestArgCommands(unittest.TestCase):

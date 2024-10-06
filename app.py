@@ -1,9 +1,16 @@
+"""
+    main runner
+"""
 import argparse
-import sys
+import task # pylint: disable=import-error
 
-import task
 
 def main(*args):
+    """
+    Entrypoint for runner
+    :param args: arguments passed in
+    :return:
+    """
     # subparser to group commands
     parser = argparse.ArgumentParser('Task-Cli: take tasks on the command line')
     subparsers = parser.add_subparsers(dest='command')
@@ -23,7 +30,8 @@ def main(*args):
 
     # list
     parser_list = subparsers.add_parser('list')
-    parser_list.add_argument('status', nargs='?', choices=['todo', 'in-progress', 'complete'], help='Task status')
+    parser_list.add_argument('status', nargs='?',
+                             choices=['todo', 'in-progress', 'complete'], help='Task status')
 
     # mark-in-progress
     parser_in_progress = subparsers.add_parser('in_progress')

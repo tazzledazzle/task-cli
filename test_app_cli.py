@@ -1,16 +1,23 @@
+"""
+    tests for the interface of task tracker
+"""
+# pylint: disable=unused-import,missing-function-docstring,missing-class-docstring
+
 import os
 import unittest
 from datetime import datetime
+from pathlib import Path
+# pylint: disable=import-error
+from task import (Status, load_json_tasks,
+                  generate_task_id, save_tasks, TIME_FORMAT, add_task)
 
-from task import Status, load_json_tasks, generate_task_id, save_tasks, time_format, add_task
-
-TEST_TASKS_FILE = 'test_tasks.json'
+TEST_TASKS_FILE = Path('test_tasks.json')
 test_task = {
             'id': generate_task_id([]),
             'description': "This is a test task",
-            'createdAt': datetime.now().strftime(time_format),
-            'status': Status.todo.value,
-            'updatedAt': datetime.now().strftime(time_format),
+            'createdAt': datetime.now().strftime(TIME_FORMAT),
+            'status': Status.TODO.value,
+            'updatedAt': datetime.now().strftime(TIME_FORMAT),
         }
 
 class TestAppCli(unittest.TestCase):
@@ -29,8 +36,8 @@ class TestAppCli(unittest.TestCase):
         try:
             tasks = load_json_tasks()
             self.assertEqual(len(tasks), 0)
-        except Exception as e:
-            print("this is a bad time")
+        except KeyError as e:
+            print("this is a bad time", e)
 
 
     def test_save_tasks(self):
@@ -49,9 +56,9 @@ class TestAppCli(unittest.TestCase):
         test_add_task = {
             'id': generate_task_id(tasks),
             'description': "this is a test",
-            'created_at': datetime.now().strftime(time_format),
-            'updated_at': datetime.now().strftime(time_format),
-            'status': Status.todo.value
+            'created_at': datetime.now().strftime(TIME_FORMAT),
+            'updated_at': datetime.now().strftime(TIME_FORMAT),
+            'status': Status.TODO.value
         }
         add_task(test_add_task['description'], test_add_task)
 
@@ -65,7 +72,7 @@ class TestAppCli(unittest.TestCase):
         self.assertEqual(generate_task_id(tasks), 2)
 
     def test_load_tasks_gpt(self):
-        with open(TEST_TASKS_FILE, 'w') as f:
+        with open(TEST_TASKS_FILE, 'w', encoding='utf-8') as f:
             f.write('')
 
         tasks = load_json_tasks(TEST_TASKS_FILE)
@@ -73,10 +80,11 @@ class TestAppCli(unittest.TestCase):
 
     def test_save_tasks_gpt(self):
         tasks_to_save = [{"id": 1, "description": "Test Task", "status": "todo"}]
-        save_tasks(TEST_TASKS_FILE, tasks_to_save)
+        save_tasks(tasks_to_save,TEST_TASKS_FILE)
 
         tasks = load_json_tasks(TEST_TASKS_FILE)
-        self.assertEqual(tasks[0]['id'], tasks_to_save[0]['id'], "Saved tasks should match the loaded tasks")
+        self.assertEqual(tasks[0]['id'], tasks_to_save[0]['id'],
+                         "Saved tasks should match the loaded tasks")
 
 
 if __name__ == '__main__':
